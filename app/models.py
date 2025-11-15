@@ -1,12 +1,13 @@
 
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, constr
 
 class LoginRequest(BaseModel):
-    # Упрощённо, без ограничений длины/формата — это тоже часть "дырок" для S06
-    username: str
-    password: str
+    # Исправлено: добавлены ограничения длины и формата
+    username: constr(strip_whitespace=True, min_length=3, max_length=48, pattern=r"^[a-zA-Z0-9_.-]+$")
+    password: constr(min_length=3, max_length=128)
 
 class Item(BaseModel):
     id: int
     name: str
-    description: str | None = None
+    description: Optional[str] = None

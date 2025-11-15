@@ -20,3 +20,15 @@ def query_one(sql: str) -> Optional[Dict[str, Any]]:
     with get_conn() as conn:
         row = conn.execute(sql).fetchone()
         return dict(row) if row else None
+
+def query_one_params(sql: str, params: tuple) -> Optional[Dict[str, Any]]:
+    """Безопасный параметризованный запрос для одной записи."""
+    with get_conn() as conn:
+        row = conn.execute(sql, params).fetchone()
+        return dict(row) if row else None
+
+def query_params(sql: str, params: tuple) -> List[Dict[str, Any]]:
+    """Безопасный параметризованный запрос для множества записей."""
+    with get_conn() as conn:
+        rows = conn.execute(sql, params).fetchall()
+        return [dict(r) for r in rows]
